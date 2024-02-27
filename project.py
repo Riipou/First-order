@@ -1,6 +1,8 @@
 from scipy.io import loadmat
-import tensorflow as tf
 from sklearn.model_selection import train_test_split
+import scipy.io
+import pandas as pd
+from scipy.sparse import csr_matrix
 
 # Charger le fichier .mat
 nom_fichier_mat = 'data_doc.mat'
@@ -27,11 +29,19 @@ if 'Xvr' in donnees:
     # print("Variable Xvr lue avec succès :\n", Xvr)
 else:
     print("La variable 'Xvr' n'a pas été trouvée dans le fichier.")
-print(Xts.shape," and ",yts.shape)
 
-# Split data into train and test sets
-Xts = Xts.T
-X_train, X_test, y_train, y_test = train_test_split(Xts, yts, test_size=0.2, random_state=42)
+# Extraire les caractéristiques et les étiquettes des données chargées
+X = donnees['Xts'].T
+y = donnees['yts']
+
+# Créer un DataFrame avec les données
+df = pd.DataFrame(X.toarray(), columns=[f'Word_{i+1}' for i in range(X.shape[1])])
+df['Label'] = y
+
+print(df)
+# Afficher le DataFrame
+#print(df)
+"""X_train, X_test, y_train, y_test = train_test_split(Xts, yts, test_size=0.2, random_state=42)
 
 # Define the perceptron model
 model = tf.keras.Sequential([
@@ -40,12 +50,13 @@ model = tf.keras.Sequential([
 
 # Compile the model
 model.compile(optimizer='adam',
-              loss='binary_crossentropy',  # Use binary crossentropy for binary classification
+              loss='MeanSquaredError',
               metrics=['accuracy'])
 
 # Train the model
-model.fit(X_train, y_train, epochs=100, batch_size=1)
+model.fit(X_train, y_train, epochs=10, batch_size=1)
 
 # Evaluate the model
 loss, accuracy = model.evaluate(X_test, y_test)
-print("Accuracy:", accuracy)
+
+print("Accuracy:", accuracy)"""
