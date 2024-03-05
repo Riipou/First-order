@@ -34,5 +34,14 @@ def loss_function(y, y_pred):
     loss = (np.linalg.norm(y - y_pred, 'fro') ** 2) / n
     return loss
 
+
+def sigmoid(x, a):
+    return 1 / (1 + np.exp(-a * x))
+
+
+def relu(x, a):
+    return np.maximum(0, a * x)
+
+
 def least_square(a, b):
     return 0
