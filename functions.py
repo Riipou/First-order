@@ -29,5 +29,10 @@ def split_data(X, y, split_value=0.8):
     return X_train, y_train, X_test, y_test
 
 
+def loss_function(y, y_pred):
+    n = y.shape[1]
+    loss = (np.linalg.norm(y - y_pred, 'fro') ** 2) / n
+    return loss
+
 def least_square(a, b):
     return 0

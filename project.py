@@ -29,6 +29,7 @@ if __name__ == "__main__":
         Xvr = donnees['Xvr']
     else:
         print("La variable 'Xvr' n'a pas été trouvée dans le fichier.")
+
     yts = one_hot_encoding(yts)
     Xts, yts = shuffle(Xts, yts)
     X_train, y_train, X_test, y_test = split_data(Xts, yts)
