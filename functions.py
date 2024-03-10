@@ -11,6 +11,11 @@ def one_hot_encoding(y):
     return y
 
 
+def reverse_one_hot_encoding(y):
+    y = np.argmax(y, axis=0)+1
+    return y
+
+
 def shuffle(X, y):
     index = np.arange(np.shape(X)[1])
     np.random.shuffle(index)
@@ -35,13 +40,22 @@ def loss_function(y, y_pred):
     return loss
 
 
-def sigmoid(x, a):
-    return 1 / (1 + np.exp(-a * x))
+def grad_W(W, B, X, y, n):
+    return X @ ((1 / n) * np.multiply(sigmoid(W.T @ X + B, 1) - y, sigmoid_derivate(W.T @ X + B, 1))).T
+
+
+def grad_B(W, B, X, y, n):
+    v1 = np.ones((n, 1))
+    return ((1 / n) * np.multiply(sigmoid(W.T @ X + B, 1) - y, sigmoid_derivate(W.T @ X + B, 1))) @ v1
+
+
+def sigmoid(X, a):
+    return 1 / (1 + np.exp(-a * X))
+
+
+def sigmoid_derivate(X, a):
+    return sigmoid(X, a) * (1 - sigmoid(X, a))
 
 
 def relu(x, a):
     return np.maximum(0, a * x)
-
-
-def least_square(a, b):
-    return 0
