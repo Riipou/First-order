@@ -1,4 +1,6 @@
 import numpy as np
+import csv
+from scipy.io import loadmat
 
 
 def one_hot_encoding(y):
@@ -93,3 +95,27 @@ def test(X, W, b):
         writer = csv.writer(csvfile)
         writer.writerow(header)
         writer.writerows(data)
+
+
+def load_mat_file(matfile):
+    donnees = loadmat(matfile)
+
+    # Xts combien de fois le mot dans le texte
+    if 'Xts' in donnees:
+        Xts = donnees['Xts']
+    else:
+        print("La variable 'Xts' n'a pas été trouvée dans le fichier.")
+
+    # id texte avec classe
+    if 'yts' in donnees:
+        yts = donnees['yts']
+    else:
+        print("La variable 'yts' n'a pas été trouvée dans le fichier.")
+
+    # Xvr combien de fois le mot dans le texte
+    if 'Xvr' in donnees:
+        Xvr = donnees['Xvr']
+    else:
+        print("La variable 'Xvr' n'a pas été trouvée dans le fichier.")
+
+    return Xts, yts, Xvr
