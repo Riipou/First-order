@@ -1,7 +1,6 @@
 from functions import *
 from scipy.io import loadmat
 import numpy as np
-import csv
 
 
 def update_W(alpha, W, B, X, y):
@@ -40,33 +39,16 @@ def linear_model(m, n, p, max_iterations, X, y):
         B, alpha_B = update_B(alpha_B, W, B, X, y)
         loss = loss_function(y, sigmoid(W.T @ X + B, 1))
         print(loss)
-        if abs(loss - loss_prev) < 1e-5:
+        if abs(loss - loss_prev) < 1e-7:
             print("break")
             break
     return W, b
 
 
-def test(X, W, b):
-    _, n = X.shape
-    B = np.tile(b, (n, 1)).T
-    y = sigmoid(W.T @ X + B, 1)
-    y = reverse_one_hot_encoding(y)
-    ids = np.arange(1, len(y)+1)
-    data = np.column_stack((ids, 1+100 * y))
-    nom_fichier = "test2.csv"
-
-    header = ["id","class"]
-    with open(nom_fichier, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(header)
-        writer.writerows(data)
-    return 0
-
-
 if __name__ == "__main__":
 
     # Charger le fichier .mat
-    nom_fichier_mat = 'data_doc.mat'
+    nom_fichier_mat = '../data/data_doc.mat'
     donnees = loadmat(nom_fichier_mat)
 
     # Xts combien de fois le mot dans le texte
@@ -89,7 +71,6 @@ if __name__ == "__main__":
 
     yts = one_hot_encoding(yts)
     Xts, yts = shuffle(Xts, yts)
-    # X_train, y_train, X_test, y_test = split_data(Xts, yts)
     m, n = Xts.shape
     p, _ = yts.shape
     W, b = linear_model(m, n, p, 100000, Xts, yts)

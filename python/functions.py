@@ -1,4 +1,5 @@
 import numpy as np
+import csv
 
 
 def one_hot_encoding(y):
@@ -12,7 +13,7 @@ def one_hot_encoding(y):
 
 
 def reverse_one_hot_encoding(y):
-    y = np.argmax(y, axis=0)+1
+    y = np.argmax(y, axis=0) + 1
     return y
 
 
@@ -59,3 +60,19 @@ def sigmoid_derivate(X, a):
 
 def relu(x, a):
     return np.maximum(0, a * x)
+
+
+def test(X, W, b):
+    _, n = X.shape
+    B = np.tile(b, (n, 1)).T
+    y = sigmoid(W.T @ X + B, 1)
+    y = reverse_one_hot_encoding(y)
+    ids = np.arange(1, len(y) + 1)
+    data = np.column_stack((ids, 1 + 100 * y))
+    nom_fichier = "../results/test.csv"
+
+    header = ["id", "class"]
+    with open(nom_fichier, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(header)
+        writer.writerows(data)
