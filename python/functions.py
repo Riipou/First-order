@@ -1,5 +1,4 @@
 import numpy as np
-import csv
 
 
 def one_hot_encoding(y):
@@ -41,25 +40,43 @@ def loss_function(y, y_pred):
     return loss
 
 
-def grad_W(W, B, X, y, n):
-    return X @ ((1 / n) * np.multiply(sigmoid(W.T @ X + B, 1) - y, sigmoid_derivate(W.T @ X + B, 1))).T
-
-
-def grad_B(W, B, X, y, n):
-    v1 = np.ones((n, 1))
-    return ((1 / n) * np.multiply(sigmoid(W.T @ X + B, 1) - y, sigmoid_derivate(W.T @ X + B, 1))) @ v1
-
-
 def sigmoid(X, a):
     return 1 / (1 + np.exp(-a * X))
 
 
 def sigmoid_derivate(X, a):
-    return sigmoid(X, a) * (1 - sigmoid(X, a))
+    return a * sigmoid(X, a) * (1 - sigmoid(X, a))
 
 
 def relu(x, a):
     return np.maximum(0, a * x)
+
+
+def initialization_random(m, p):
+    W = np.random.rand(m, p) - 0.5
+    b = np.random.rand(p) - 0.5
+    return W, b
+
+
+def initialization_xavier(m, p):
+    W = np.random.randn(m, p) * np.sqrt(2 / (m + p))
+    b = np.zeros((p,))
+    return W, b
+
+
+def initialization_lecun(m, p):
+    W = np.random.randn(m, p) * np.sqrt(1 / m)
+    b = np.zeros((p,))
+    return W, b
+
+
+def grad_W(W, B, a, X, y, n):
+    return X @ ((1 / n) * np.multiply(sigmoid(W.T @ X + B, a) - y, sigmoid_derivate(W.T @ X + B, a))).T
+
+
+def grad_B(W, B, a, X, y, n):
+    v1 = np.ones((n, 1))
+    return ((1 / n) * np.multiply(sigmoid(W.T @ X + B, a) - y, sigmoid_derivate(W.T @ X + B, a))) @ v1
 
 
 def test(X, W, b):
