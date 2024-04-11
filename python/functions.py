@@ -80,15 +80,27 @@ def grad_B(W, B, a, X, y, n):
     v1 = np.ones((n, 1))
     return ((1 / n) * np.multiply(sigmoid(W.T @ X + B, a) - y, sigmoid_derivate(W.T @ X + B, a))) @ v1
 
+def evol_beta_paul(k):
+    return  (k-1)/(k+2)
 
-def test(X, W, b):
+def evol_beta_nesterov(alpha_b):
+    alpha_b2 = (np.sqrt((alpha_b**4) + 4*alpha_b**2) - alpha_b**2) / 2
+    beta = (alpha_b * (1 - alpha_b)) / (alpha_b**2 + alpha_b2)
+    return beta, alpha_b2
+
+
+def test(X, W, b, num, a, stop,  init, accel, evol_b):
     _, n = X.shape
     B = np.tile(b, (n, 1)).T
     y = sigmoid(W.T @ X + B, 1)
     y = reverse_one_hot_encoding(y)
     ids = np.arange(1, len(y) + 1)
     data = np.column_stack((ids, 1 + 100 * y))
-    nom_fichier = "../results/test.csv"
+    if accel != "none":
+        nom_fichier = f"../results/test_{num}_{a}_{stop}_{init}_{accel}_{evol_b}.csv"
+    else :
+        nom_fichier = f"../results/test_{num}_{a}_{stop}_{init}.csv"
+
 
     header = ["id", "class"]
     with open(nom_fichier, 'w', newline='') as csvfile:
