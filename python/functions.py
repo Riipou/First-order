@@ -26,19 +26,19 @@ def shuffle(X, y):
     return X, y
 
 
-def split_data(X, y, split_value=0.8):
+def split_data(X, y, split_value=0.95):
     m = X.shape[1]
     m = int(m * split_value)
     X_train = X[:, :m]
-    y_train = y[:m, :]
+    y_train = y[:, :m]
     X_test = X[:, m:]
-    y_test = y[m:, :]
+    y_test = y[:, m:]
     return X_train, y_train, X_test, y_test
 
 
 def loss_function(y, y_pred):
     n = y.shape[1]
-    loss = (np.linalg.norm(y - y_pred, 'fro') ** 2) / n
+    loss = (np.linalg.norm(y - y_pred, 'fro') ** 2) / (2*n)
     return loss
 
 
@@ -80,16 +80,18 @@ def grad_B(W, B, a, X, y, n):
     v1 = np.ones((n, 1))
     return ((1 / n) * np.multiply(sigmoid(W.T @ X + B, a) - y, sigmoid_derivate(W.T @ X + B, a))) @ v1
 
+
 def evol_beta_paul(k):
-    return  (k-1)/(k+2)
+    return (k - 1) / (k + 2)
+
 
 def evol_beta_nesterov(alpha_b):
-    alpha_b2 = (np.sqrt((alpha_b**4) + 4*alpha_b**2) - alpha_b**2) / 2
-    beta = (alpha_b * (1 - alpha_b)) / (alpha_b**2 + alpha_b2)
+    alpha_b2 = (np.sqrt((alpha_b ** 4) + 4 * alpha_b ** 2) - alpha_b ** 2) / 2
+    beta = (alpha_b * (1 - alpha_b)) / (alpha_b ** 2 + alpha_b2)
     return beta, alpha_b2
 
 
-def test(X, W, b, num, a, stop,  init, accel, evol_b):
+def test(X, W, b, nb_ite, a, stop, init, accel, evol_beta):
     _, n = X.shape
     B = np.tile(b, (n, 1)).T
     y = sigmoid(W.T @ X + B, 1)
@@ -97,10 +99,9 @@ def test(X, W, b, num, a, stop,  init, accel, evol_b):
     ids = np.arange(1, len(y) + 1)
     data = np.column_stack((ids, 1 + 100 * y))
     if accel != "none":
-        nom_fichier = f"../results/test_{num}_{a}_{stop}_{init}_{accel}_{evol_b}.csv"
-    else :
-        nom_fichier = f"../results/test_{num}_{a}_{stop}_{init}.csv"
-
+        nom_fichier = f"../results/tests/test_{nb_ite}_ite_sigmoid_{a}_stop_{stop}_{init}_{accel}_beta_{evol_beta}.csv"
+    else:
+        nom_fichier = f"../results/tests/test_{nb_ite}_ite_sigmoid_{a}_stop_{stop}_{init}.csv"
 
     header = ["id", "class"]
     with open(nom_fichier, 'w', newline='') as csvfile:
