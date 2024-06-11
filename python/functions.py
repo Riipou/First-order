@@ -72,12 +72,31 @@ def initialization_lecun(m, p):
     return W, b
 
 
-def grad_W(W, B, a, X, y, n):
+def grad_W(W, B, a, X, y):
+    _, n = X.shape
+    _, p = W.shape
+    if B.shape == (p,):
+        # Reshape to (p, 1)
+        B = B.reshape(p, 1)
+
+    if y.shape == (p,):
+        # Reshape to (p, 1)
+        y = y.reshape(p, 1)
+
     return X @ ((1 / n) * np.multiply(sigmoid(W.T @ X + B, a) - y, sigmoid_derivate(W.T @ X + B, a))).T
 
 
-def grad_B(W, B, a, X, y, n):
+def grad_B(W, B, a, X, y):
+    _, n = X.shape
+    _, p = W.shape
     v1 = np.ones((n, 1))
+    if B.shape == (p,):
+        # Reshape to (p, 1)
+        B = B.reshape(p, 1)
+
+    if y.shape == (p,):
+        # Reshape to (p, 1)
+        y = y.reshape(p, 1)
     return ((1 / n) * np.multiply(sigmoid(W.T @ X + B, a) - y, sigmoid_derivate(W.T @ X + B, a))) @ v1
 
 
