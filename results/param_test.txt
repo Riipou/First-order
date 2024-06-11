@@ -1,4 +1,0 @@
-num_iterations = 100000
-a = 0.05
-critère d'arrêt = 1e-05
-initialisation : random
