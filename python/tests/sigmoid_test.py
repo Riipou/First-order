@@ -4,7 +4,8 @@ from python.algorithms.AGD import AGD_function
 import numpy as np
 import random
 
-def sigmoid_test(X_train, y_train, epoch = 100):
+def sigmoid_test(Xts, yts, epoch = 100):
+    X_train, y_train, X_val, y_val = split_data(Xts, yts, split_value=0.95)
     m, n = X_train.shape
     p, _ = y_train.shape
     stop_condition = 1e-10
@@ -15,10 +16,16 @@ def sigmoid_test(X_train, y_train, epoch = 100):
         evol_beta = "nesterov"
         file_name = f"../results/sigmoid/a={a}.txt"
         with open(file_name, 'w', newline='') as file:
-            W, b, loss_vect, _ = AGD_function(m, n, p, epoch, a, stop_condition, X_train, y_train, initialisation, acceleration, evol_beta)
+            W, b, loss_vect, val_vect = AGD_function(m, n, p, epoch, a, stop_condition, X_train, y_train, initialisation, acceleration, evol_beta, validation=True, X_val=X_val, y_val=y_val)
             i = 0
             for l in loss_vect:
                 i += 1
                 file.write(f"({i},{l})\n")
+            file.write(f"\nValidation:\n")
+            i = 0
+            for l in val_vect:
+                i += 1
+                file.write(f"({i},{l})\n")
         #test(Xvr, W, b, epoch, a, stop_condition, initialisation, acceleration, evol_beta)
+
         pass

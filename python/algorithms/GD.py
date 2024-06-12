@@ -50,5 +50,6 @@ def linear_model(m, n, p, max_iterations, a, stop_condition, X, y, init):
         if abs(loss - loss_prev) < stop_condition:
             print("break")
             break
+    b = B[:, 1]
     return W, b, loss_vect
 

@@ -38,12 +38,13 @@ def split_data(X, y, split_value=0.95):
 
 def loss_function(y, y_pred):
     n = y.shape[1]
-    loss = (np.linalg.norm(y - y_pred, 'fro') ** 2) / (2*n)
+    loss = (np.linalg.norm(y - y_pred, 'fro') ** 2) / (2 * n)
     return loss
 
-def loss_function_L2(y,y_pred,lbd,W):
+
+def loss_function_L2(y, y_pred, lbd, W):
     n = y.shape[1]
-    loss = ((np.linalg.norm(y - y_pred, 'fro') ** 2) / (2 * n))+ (lbd/2)*np.sum(W**2)
+    loss = ((np.linalg.norm(y - y_pred, 'fro') ** 2) / (2 * n)) + (lbd / 2) * np.sum(W ** 2)
     return loss
 
 
@@ -90,7 +91,8 @@ def grad_W(W, B, a, X, y):
 
     return X @ ((1 / n) * np.multiply(sigmoid(W.T @ X + B, a) - y, sigmoid_derivate(W.T @ X + B, a))).T
 
-def grad_W_L2(W, B, a, X, y,lbd):
+
+def grad_W_L2(W, B, a, X, y, lbd):
     _, n = X.shape
     _, p = W.shape
     if B.shape == (p,):
@@ -101,7 +103,7 @@ def grad_W_L2(W, B, a, X, y,lbd):
         # Reshape to (p, 1)
         y = y.reshape(p, 1)
 
-    return X @ ((1 / n) * np.multiply(sigmoid(W.T @ X + B, a) - y, sigmoid_derivate(W.T @ X + B, a))).T+lbd*W
+    return X @ ((1 / n) * np.multiply(sigmoid(W.T @ X + B, a) - y, sigmoid_derivate(W.T @ X + B, a))).T + lbd * W
 
 
 def grad_B(W, B, a, X, y):
@@ -145,6 +147,7 @@ def test(X, W, b, nb_ite, a, stop, init, accel, evol_beta):
         writer = csv.writer(csvfile)
         writer.writerow(header)
         writer.writerows(data)
+
 
 def load_mat_file(matfile):
     donnees = loadmat(matfile)

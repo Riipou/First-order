@@ -19,12 +19,12 @@ if __name__ == "__main__":
     p, _ = yts.shape
 
     # Paramètre a de la sigmoid
-    a = 0.2
+    a = 0.05
 
     # Choisir initialisation : random, xavier, lecun
     initialisation = "random"
     # Choisir acceleration : none, polyak, nesterov
-    acceleration = "polyak"
+    acceleration = "nesterov"
     # Choisir evolution beta dans le cas d'AGD : const, paul , nesterov
     evol_beta = "nesterov"
 
