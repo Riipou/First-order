@@ -3,6 +3,7 @@ from python.algorithms.SGD import SGD_function
 from python.algorithms.GD import linear_model
 from python.algorithms.AGD import AGD_function
 from python.tests.GDvsSGD import comparisonGD_SGD
+from scipy.io import savemat
 import numpy as np
 
 if __name__ == "__main__":
@@ -26,7 +27,7 @@ if __name__ == "__main__":
     stop_condition = 1e-8
 
     # Choisir initialisation : random, xavier, lecun
-    initialisation = "random"
+    initialisation = "lecun"
     # Choisir acceleration : none, polyak, nesterov
     acceleration = "nesterov"
     # Choisir evolution beta dans le cas d'AGD : const, paul , nesterov
@@ -45,5 +46,9 @@ if __name__ == "__main__":
         for l in loss_vect:
             i += 1
             file.write(f"({i},{l})\n")
+    # Définir le nom du fichier .mat
+    nom_fichier = 'classifieur.mat'
 
+    # Enregistrer la matrice dans un fichier .mat
+    savemat(nom_fichier, {'W': W, 'b': b})
     test(Xvr, W, b, num_iterations, a, stop_condition, initialisation, acceleration, evol_beta)
